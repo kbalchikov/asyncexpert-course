@@ -5,13 +5,23 @@ namespace AwaitableExercises.Core
 {
     public static class BoolExtensions
     {
+        public static BoolAwaiter GetAwaiter(this bool value)
+        {
+            return new BoolAwaiter(value);
+        }
     }
 
     public class BoolAwaiter : INotifyCompletion
     {
-        public void OnCompleted(Action continuation)
+        private readonly bool _value;
+
+        public BoolAwaiter(bool value)
         {
-            throw new NotImplementedException();
+            _value = value;
         }
+
+        public bool IsCompleted => true;
+        public void OnCompleted(Action continuation) => Console.WriteLine("Finished!");
+        public bool GetResult() => _value;
     }
 }
