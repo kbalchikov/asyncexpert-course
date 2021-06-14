@@ -5,7 +5,7 @@ using System.Threading;
 namespace Synchronization.Benchmark
 {
     [DisassemblyDiagnoser(exportCombinedDisassemblyReport: true)]
-    [SimpleJob(targetCount: 10, warmupCount: 1)]
+    [SimpleJob(warmupCount: 10, targetCount: 20)]
     public class LockTest
     {
         private const int QueueCapacity = 100;
@@ -54,7 +54,7 @@ namespace Synchronization.Benchmark
                 var reader = new Thread(() =>
                 {
                     startEvent.Wait();
-                    for (int i = 0; i < 10_000_000; i++)
+                    for (int i = 0; i < 1_000_000; i++)
                         queue.Peek();
 
                     readersFinished.Signal();
@@ -67,12 +67,12 @@ namespace Synchronization.Benchmark
             {
                 startEvent.Wait();
 
-                while (true)
+                while (!readersFinished.IsSet)
                 {
-                    for (int i = 0; !readersFinished.IsSet && i < 100; i++)
+                    for (int i = 0; !readersFinished.IsSet || i < 100; i++)
                         queue.Enqueue(i);
 
-                    for (int i = 0; !readersFinished.IsSet && i < 100; i++)
+                    for (int i = 0; !readersFinished.IsSet || i < 100; i++)
                         queue.Dequeue();
                 }
             });

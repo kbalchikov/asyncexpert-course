@@ -1,0 +1,49 @@
+﻿/*************** 1.000.000 reads / 15 readers / 1 writer ***************/
+
+BenchmarkDotNet=v0.13.0, OS=Windows 10.0.19043.1052 (21H1/May2021Update)
+AMD Ryzen 7 1700, 1 CPU, 16 logical and 8 physical cores
+.NET SDK=5.0.300
+  [Host]     : .NET 5.0.6 (5.0.621.22011), X64 RyuJIT
+  Job-PDLATN : .NET 5.0.6 (5.0.621.22011), X64 RyuJIT
+
+IterationCount=20  WarmupCount=10
+
+|               Method |    Mean |    Error |   StdDev | Ratio | RatioSD | Code Size |
+|--------------------- |--------:|---------:|---------:|------:|--------:|----------:|
+|                 Lock | 3.322 s | 0.1465 s | 0.1687 s |  1.00 |    0.00 |     555 B |
+|     ReaderWriterLock | 3.920 s | 0.1763 s | 0.2030 s |  1.18 |    0.08 |     566 B |
+| ReaderWriterLockSlim | 1.168 s | 0.1395 s | 0.1606 s |  0.35 |    0.05 |     600 B |
+
+
+/*************** 10.000.000 reads / 15 readers / 1 writer ***************/
+
+BenchmarkDotNet=v0.13.0, OS=Windows 10.0.19043.1052 (21H1/May2021Update)
+AMD Ryzen 7 1700, 1 CPU, 16 logical and 8 physical cores
+.NET SDK=5.0.300
+  [Host]     : .NET 5.0.6 (5.0.621.22011), X64 RyuJIT
+  Job-KOXRML : .NET 5.0.6 (5.0.621.22011), X64 RyuJIT
+
+IterationCount=10  WarmupCount=3
+
+|               Method |       Mean |    Error |    StdDev | Ratio | RatioSD | Code Size |
+|--------------------- |-----------:|---------:|----------:|------:|--------:|----------:|
+|                 Lock | 3,372.7 ms | 199.8 ms | 132.13 ms |  1.00 |    0.00 |     619 B |
+|     ReaderWriterLock | 3,454.5 ms | 975.4 ms | 645.14 ms |  1.03 |    0.21 |     483 B |
+| ReaderWriterLockSlim |   936.9 ms | 133.1 ms |  88.06 ms |  0.28 |    0.03 |     619 B |
+
+
+/*************** 1.000.000 reads / 4 readers / 1 writer ***************/
+
+BenchmarkDotNet=v0.13.0, OS=Windows 10.0.19043.1052 (21H1/May2021Update)
+AMD Ryzen 7 1700, 1 CPU, 16 logical and 8 physical cores
+.NET SDK=5.0.300
+  [Host]     : .NET 5.0.6 (5.0.621.22011), X64 RyuJIT
+  Job-IJUXXN : .NET 5.0.6 (5.0.621.22011), X64 RyuJIT
+
+IterationCount=20  WarmupCount=10
+
+|               Method |       Mean |     Error |    StdDev | Ratio | RatioSD | Code Size |
+|--------------------- |-----------:|----------:|----------:|------:|--------:|----------:|
+|                 Lock |   982.8 ms |  63.94 ms |  73.64 ms |  1.00 |    0.00 |     555 B |
+|     ReaderWriterLock | 1,055.7 ms | 143.25 ms | 164.97 ms |  1.08 |    0.18 |     566 B |
+| ReaderWriterLockSlim |   332.8 ms |  45.78 ms |  52.72 ms |  0.34 |    0.07 |     600 B |
