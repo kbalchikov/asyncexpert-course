@@ -1,25 +1,36 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Synchronization.Core;
 
 namespace Synchronization
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
-            var scopeName = "default";
-            var isSystemWide = false;
-            if (args.Length == 2)
+            var are = new MyAsyncAutoResetEvent();
+            var random = new Random();
+
+            var tasks = Enumerable.Range(1, 8).Select(_ =>
             {
-                scopeName = args[0];
-                isSystemWide = bool.Parse(args[1]);
-            }
-            using (new NamedExclusiveScope(scopeName, isSystemWide))
-            {
-                Console.WriteLine("Hello world!");
-                Thread.Sleep(300);
-            }
+                return Task.Run(async () =>
+                {
+                    int number = random.Next(100, 1000);
+                    Console.WriteLine($"Task #{number} waiting to start");
+                    await are.WaitAsync();
+
+                    Console.WriteLine($"Task #{number} doing hard work");
+                    await Task.Delay(1000);
+                    Console.WriteLine($"Task #{number} completed");
+
+                    are.Set();
+                });
+            });
+
+            await Task.WhenAll(tasks);
+            Console.WriteLine("All completed");
         }
     }
 }
